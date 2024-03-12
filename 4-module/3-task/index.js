@@ -1,5 +1,5 @@
 function highlight(table) {
-  let teachersList = document.querySelectorAll('tbody tr');
+  let teachersList = table.querySelectorAll('tbody tr');
   
   for (let teacher of teachersList) {
     const isAvailable = teacher.cells[3].dataset.available;
