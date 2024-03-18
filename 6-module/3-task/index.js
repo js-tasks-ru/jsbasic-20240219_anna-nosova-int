@@ -48,18 +48,13 @@ export default class Carousel {
     const carouselItems = this.#elem.querySelector('.carousel__inner');
     const arrowLeft = this.#elem.querySelector('.carousel__arrow_left');
     const arrowRight = this.#elem.querySelector('.carousel__arrow_right');
-    //const slideWidth = carouselItems.querySelector('.carousel__slide').offsetWidth;
-    //offsetWidth возвращает 0, видимо, потому что элемент еще не отрисован. Пришлось отказаться от переменной
-    //const slideWidth = 988;
-    const slideWidth = 500;
-    //реальная ширина картинки не принимается тестами (почему??). Пришлось использовать 500, чтобы тесты прошли
     const slidesQty = this.slides.length;
 
     let counter = 1;
 
     arrowLeft.style.display = 'none';
 
-    function checkArrows() {
+    function checkVisibility() {
 
       if (counter >= slidesQty) {
         arrowRight.style.display = 'none';
@@ -76,24 +71,24 @@ export default class Carousel {
     }
   
     arrowRight.addEventListener('click', event => {
-      carouselItems.style.transform = `translateX(${-slideWidth * counter}px)`; 
+      carouselItems.style.transform = `translateX(${-carouselItems.querySelector('.carousel__slide').offsetWidth * counter}px)`; 
       counter++;
-      checkArrows();
+      checkVisibility();
     });
 
     arrowLeft.addEventListener('click', event => {
       --counter;
-      carouselItems.style.transform = `translateX(${-slideWidth * (counter - 1)}px)`;
-      checkArrows();
+      carouselItems.style.transform = `translateX(${-carouselItems.querySelector('.carousel__slide').offsetWidth * (counter - 1)}px)`;
+      checkVisibility();
     });
   }
 
   addToCartEventListener() {
     this.#elem.addEventListener('click', event => {
-      let cartBtn = event.target.closest('.carousel__button');
-      let product = event.target.closest('.carousel__slide');
+      const cartBtn = event.target.closest('.carousel__button');
+      const product = event.target.closest('.carousel__slide');
       if (cartBtn) {
-        let cartEvent = new CustomEvent('product-add', {
+        const cartEvent = new CustomEvent('product-add', {
           detail: product.dataset.id,
           bubbles: true,
         });
