@@ -50,7 +50,7 @@ export default class UserTable {
   }
 
   eventListener(event) {
-    for (let btn of this.#elem.querySelectorAll("button")) {
+    for (let btn of this.#elem.querySelectorAll('button')) {
       btn.addEventListener('click', event => {
         let row = event.target.parentElement.parentElement;
         this.#rows.splice(row.index - 1, 1);
