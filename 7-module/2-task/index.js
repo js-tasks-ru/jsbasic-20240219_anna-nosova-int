@@ -32,7 +32,6 @@ export default class Modal {
   open() {
     document.body.append(this.elem);
     document.body.classList.add('is-modal-open');
-    document.addEventListener('keydown', this.onEscBtn)
   }
 
   setTitle(title) {
@@ -68,4 +67,3 @@ export default class Modal {
     });
   }
 }
-
