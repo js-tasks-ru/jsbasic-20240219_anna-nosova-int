@@ -1,99 +1,100 @@
 import createElement from '../../assets/lib/create-element.js';
 
 export default class Carousel {
-  #elem;
 
   constructor(slides) {
     this.slides = slides;
-    this.#elem = this.createElem();
+    this.currentSlideNumber = 0;
 
-    this.arrowsEventListener();
-    this.addToCartEventListener();
+    this.render();
+    this.addEventListeners();
   }
 
-  get elem() {
-    this._container = this.#elem;
-    return this._container;
+  sub(ref) {
+    return this.elem.querySelector(`.carousel__${ref}`);
   }
 
-  createElem() {
-    const carousel = createElement(`
-      <div class="carousel">
-        <div class="carousel__arrow carousel__arrow_right">
-          <img src="/assets/images/icons/angle-icon.svg" alt="icon">
-        </div>
-        <div class="carousel__arrow carousel__arrow_left">
-          <img src="/assets/images/icons/angle-left-icon.svg" alt="icon">
-        </div>
+  render() {
+    this.elem = createElement(`
+    <div class="carousel">
+      <div class="carousel__arrow carousel__arrow_right">
+        <img src="/assets/images/icons/angle-icon.svg" alt="icon" />
+      </div>
+      <div class="carousel__arrow carousel__arrow_left">
+        <img src="/assets/images/icons/angle-left-icon.svg" alt="icon" />
+      </div>
+      <div class="carousel__inner"></div>
+    </div>
+    `);
 
-        <div class="carousel__inner">`
-        + this.slides.map(slide => 
-          `<div class="carousel__slide" data-id="${slide.id}">
-            <img src="/assets/images/carousel/${slide.image}" class="carousel__img" alt="slide">
-            <div class="carousel__caption">
-              <span class="carousel__price">€${slide.price.toFixed(2)}</span>
-              <div class="carousel__title">${slide.name}</div>
-              <button type="button" class="carousel__button">
-                <img src="/assets/images/icons/plus-icon.svg" alt="icon">
-              </button>
-            </div>
-          </div>`).join('')
-        + `</div>
-        </div>`
-    );
-    return carousel;
+    let slides = this.slides.map(slide => createElement(`
+    <div class="carousel__slide" data-id="${slide.id}">
+      <img
+        src="/assets/images/carousel/${slide.image}"
+        class="carousel__img"
+        alt="slide"
+      />
+      <div class="carousel__caption">
+        <span class="carousel__price">€${slide.price.toFixed(2)}</span>
+        <div class="carousel__title">${slide.name}</div>
+        <button type="button" class="carousel__button">
+          <img src="/assets/images/icons/plus-icon.svg" alt="icon" />
+        </button>
+      </div>
+    </div>`));
+    
+    this.sub('inner').append(...slides);
+
+    this.updateArrows();
+
   }
 
-  arrowsEventListener() {
-    const carouselItems = this.#elem.querySelector('.carousel__inner');
-    const arrowLeft = this.#elem.querySelector('.carousel__arrow_left');
-    const arrowRight = this.#elem.querySelector('.carousel__arrow_right');
-    const slidesQty = this.slides.length;
+  updateArrows() {
+    let offset = -this.elem.offsetWidth * this.currentSlideNumber;
+    this.sub('inner').style.transform = `translateX(${offset}px)`;
 
-    let counter = 1;
-
-    arrowLeft.style.display = 'none';
-
-    function checkVisibility() {
-
-      if (counter >= slidesQty) {
-        arrowRight.style.display = 'none';
-        return;
-      } else {
-        arrowRight.style.display = '';
-      }
-      if (counter > 1) {
-        arrowLeft.style.display = '';
-        return;
-      } else {
-        arrowLeft.style.display = 'none';
-      }
+    if (this.currentSlideNumber == this.slides.length - 1) {
+      this.sub('arrow_right').style.display = 'none';
+    } else {
+      this.sub('arrow_right').style.display = '';
     }
-  
-    arrowRight.addEventListener('click', event => {
-      carouselItems.style.transform = `translateX(${-carouselItems.querySelector('.carousel__slide').offsetWidth * counter}px)`; 
-      counter++;
-      checkVisibility();
-    });
 
-    arrowLeft.addEventListener('click', event => {
-      --counter;
-      carouselItems.style.transform = `translateX(${-carouselItems.querySelector('.carousel__slide').offsetWidth * (counter - 1)}px)`;
-      checkVisibility();
-    });
+    if (this.currentSlideNumber == 0) {
+      this.sub('arrow_left').style.display = 'none';
+    } else {
+      this.sub('arrow_left').style.display = '';
+    }
   }
 
-  addToCartEventListener() {
-    this.#elem.addEventListener('click', event => {
-      const cartBtn = event.target.closest('.carousel__button');
-      const product = event.target.closest('.carousel__slide');
-      if (cartBtn) {
-        const cartEvent = new CustomEvent('product-add', {
-          detail: product.dataset.id,
-          bubbles: true,
-        });
-        this.elem.dispatchEvent(cartEvent);
+  addEventListeners() {
+    this.elem.onclick = ({target}) => {
+      let button = target.closest('.carousel__button');
+      if (button) {
+        let id = target.closest('[data-id]').dataset.id;
+
+        this.elem.dispatchEvent(new CustomEvent('product-add', {
+          detail: id,
+          bubbles: true
+        }));
       }
-    });
+
+      if (target.closest('.carousel__arrow_right')) {
+        this.next();
+      }
+
+      if (target.closest('.carousel__arrow_left')) {
+        this.prev();
+      }
+    };
+  }
+
+  next() {
+    this.currentSlideNumber++;
+    this.updateArrows();
+  }
+
+  prev() {
+    this.currentSlideNumber--;
+    this.updateArrows();
   }
 }
