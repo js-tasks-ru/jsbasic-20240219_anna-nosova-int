@@ -40,6 +40,7 @@ export default class StepSlider {
   onSliderClick() {
 
     addEventListener('click', event => {
+      event.preventDefault();
       let leftRelative = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
       let valuePercents = Math.round(leftRelative * (this.steps - 1)) / (this.steps - 1) * 100;
 
@@ -54,12 +55,12 @@ export default class StepSlider {
 
       this.sub('steps').children[this.value].classList.add('slider__step-active');
 
-      this.elem.dispatchEvent(
-        new CustomEvent('slider-change', {
-          detail: this.value,
-          bubbles: true,
-        })
-      );
+      let sliderChangeEvent = new CustomEvent('slider-change', {
+        detail: this.value,
+        bubbles: true,
+      });
+
+      this.elem.dispatchEvent(sliderChangeEvent);
     });
   }
 }
