@@ -44,6 +44,18 @@ export default class StepSlider {
       let leftRelative = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
       let valuePercents = Math.round(leftRelative * (this.steps - 1)) / (this.steps - 1) * 100;
 
+      console.log(leftRelative);
+
+      if (valuePercents > 100) {
+        valuePercents = 100;
+      }
+
+      if (leftRelative > 1) {
+        leftRelative = 1;
+      }
+
+      console.log(valuePercents);
+
       this.value = Math.round(leftRelative * (this.steps - 1));
       this.sub('thumb').style.left = `${valuePercents}%`;
       this.sub('value').textContent = `${this.value}`;
@@ -55,12 +67,12 @@ export default class StepSlider {
 
       this.sub('steps').children[this.value].classList.add('slider__step-active');
 
-      let sliderChangeEvent = new CustomEvent('slider-change', {
-        detail: this.value,
-        bubbles: true,
-      });
-
-      this.elem.dispatchEvent(sliderChangeEvent);
+      this.elem.dispatchEvent(
+        new CustomEvent('slider-change', {
+          detail: this.value,
+          bubbles: true,
+        })
+      );
     });
   }
 }

@@ -49,16 +49,17 @@ export default class StepSlider {
   
       this.sub('steps').children[this.value].classList.add('slider__step-active');
 
-      this.value = `${Math.round(leftRelative * (this.steps - 1))}`;
+      this.value = Math.round(leftRelative * (this.steps - 1));
       this.sub('value').textContent = this.value;
       this.sub('progress').style.width = `${leftPercents}%`;
       this.sub('thumb').style.left = `${leftPercents}%`;
   
-      let sliderChangeEvent = new CustomEvent('slider-change', {
-        detail: this.value,
-        bubbles: true,
-      });
-      this.elem.dispatchEvent(sliderChangeEvent);
+      this.elem.dispatchEvent(
+        new CustomEvent('slider-change', {
+          detail: this.value,
+          bubbles: true,
+        })
+      );
     });
   }
 
