@@ -39,7 +39,7 @@ export default class StepSlider {
 
   onSliderClick() {
 
-    addEventListener('click', event => {
+    this.elem.addEventListener('click', event => {
       event.preventDefault();
       let leftRelative = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
       let valuePercents = Math.round(leftRelative * (this.steps - 1)) / (this.steps - 1) * 100;
