@@ -98,3 +98,5 @@ export default class Carousel {
     this.updateArrows();
   }
 }
+
+// что с тестом?
