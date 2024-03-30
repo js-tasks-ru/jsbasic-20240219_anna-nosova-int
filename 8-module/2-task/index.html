@@ -33,7 +33,7 @@
 
     <div class="controls__row">
       <label class="subheading">
-        <input type="checkbox" data-vegetarian-only> Vegetarian Only
+        <input type="checkbox" data-vegeterian-only> Vegetarian Only
       </label>
     </div>
 
@@ -65,8 +65,8 @@
       productGrid.updateFilter({ noNuts: event.target.checked });
     });
 
-    let vegetarianOnlyControl = document.querySelector('[data-vegetarian-only]');
-    vegetarianOnlyControl.addEventListener('change', () => {
+    let vegeterianOnlyControl = document.querySelector('[data-vegeterian-only]');
+    vegeterianOnlyControl.addEventListener('change', () => {
       productGrid.updateFilter({ vegeterianOnly: event.target.checked });
     });
 
