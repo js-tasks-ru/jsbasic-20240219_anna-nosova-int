@@ -40,7 +40,7 @@ export default class CartIcon {
 
   updatePosition() {
     if (!this.initialTopCoord) {
-      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
+      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.scrollY;
     }
     
     if (!this.elem.isHidden) {
@@ -50,22 +50,21 @@ export default class CartIcon {
         document.documentElement.clientWidth - this.elem.offsetWidth - 10
       ) + 'px';
       
-      if (window.pageYOffset > this.initialTopCoord || !this.isMobile) {
+      window.scrollY > this.initialTopCoord || !this.isMobile ?
         Object.assign(this.elem.style, {
           position: 'fixed',
           top: '50px',
           zIndex: 1e3,
           right: '10px',
           left: `${leftIndent}`,
-        });
-      } else {
+        })
+        : 
         Object.assign(this.elem.style, {
           position: '',
           top: '',
           left: '',
           zIndex: '',
         });
-      }
     }
   }
 
