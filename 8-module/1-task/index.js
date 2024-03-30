@@ -40,7 +40,7 @@ export default class CartIcon {
 
   updatePosition() {
     if (!this.initialTopCoord) {
-      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.scrollY;
+      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
     }
     
     if (!this.elem.isHidden) {
@@ -50,7 +50,7 @@ export default class CartIcon {
         document.documentElement.clientWidth - this.elem.offsetWidth - 10
       ) + 'px';
       
-      window.scrollY > this.initialTopCoord || !this.isMobile ?
+      window.pageYOffset > this.initialTopCoord || !this.isMobile ?
         Object.assign(this.elem.style, {
           position: 'fixed',
           top: '50px',
