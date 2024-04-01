@@ -7,7 +7,7 @@ export default class Cart {
 
   addProduct(product) {
     if (!product) {
-      break;
+      return;
     } else { 
       let cartItem = this.cartItems.find((item) => item.product.id === product.id);
       if (!cartItem) {
@@ -19,9 +19,8 @@ export default class Cart {
       } else {
         cartItem.count += 1;
       }
+      this.onProductUpdate(cartItem);
     }
-
-    this.onProductUpdate(cartItem);
   }
 
   updateProductCount(productId, amount) {
