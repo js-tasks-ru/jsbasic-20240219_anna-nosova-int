@@ -21,6 +21,8 @@ export default class Modal {
             <img src="/assets/images/icons/cross-icon.svg" alt="close-icon" />
           </button>
 
+          <h3 class="modal__title"></h3>
+
         </div>
 
         <div class="modal__body">
@@ -35,9 +37,7 @@ export default class Modal {
   }
 
   setTitle(title) {
-    let modalTitle = createElement(`<h3 class="modal__title"></h3>`);
-    modalTitle.textContent = title;
-    this.sub('header').append(modalTitle);
+    this.sub('title').textContent = title;
   }
 
   setBody(content) {
